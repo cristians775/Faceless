@@ -6,7 +6,7 @@ class Video inherits Publicacion {
 	var property duracion = 0
 
 	override method espacio() {
-		return duracion * calidad
+		return duracion * calidad.calidad()
 	}
 
 }
