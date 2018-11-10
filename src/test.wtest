@@ -4,7 +4,7 @@ import fotos.*
 import videos.*
 import publicacion.*
 import permisos.*
-import calidad.*
+
 import factordecomprension.*
 import faceless.*
 
@@ -62,7 +62,7 @@ describe "Faceless" {
 		fede.listaBlanca(vadim)
 		faceless.usuarioPublica(fede, foto)
 		assert.notThat(faceless.usuarioPuedeVer(carlosLombardi, foto))
-		assert.that(faceless.usuarioPuedeVer(vadim, foto)
+		assert.that(faceless.usuarioPuedeVer(vadim, foto))
 	}
 
 	test "Total de likes de una publicacion" {
