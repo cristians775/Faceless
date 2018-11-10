@@ -2,6 +2,7 @@ class Publicacion{
 	
 	var likes=[]
 	var property permiso=null
+	var property duenio=null
 	
 	method espacio()
 	
@@ -20,9 +21,13 @@ class Publicacion{
     method quitarDislike(usuario){
     	likes.remove(usuario)
     }
-    method puedeVer(usuario,duenio){
+    method tienePermiso(usuario){
     	
-    	permiso.puedeVer(usuario,duenio)
+    	return permiso.tienePermiso(usuario,duenio)
     	
+    }
+    method mejoresAmigos(usuario){
+    	
+    	return usuario.mejoresAmigos()
     }
 }

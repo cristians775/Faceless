@@ -1,0 +1,133 @@
+import usuario.*
+import texto.*
+import fotos.*
+import videos.*
+import publicacion.*
+import permisos.*
+import calidad.*
+import factordecomprension.*
+import faceless.*
+
+describe "Faceless" {
+
+	const carlosLombardi = new Usuario()
+	const vadim = new Usuario()
+	const fede = new Usuario()
+	const fernando = new Usuario()
+	const video = new Video()
+	const video2 = new Video()
+	const video3 = new Video()
+	const calidad = new HD()
+	const foto = new Foto()
+	const texto = new Texto()
+	const soloAmigos = new SoloAmigos()
+	const listaBlanca = new ListaBlanca()
+	const listaNegra = new ListaNegra()
+
+	fixture {
+		video.calidad(calidad)
+		video.permiso(soloAmigos)
+		video2.calidad(calidad)
+		video2.permiso(soloAmigos)
+		video3.calidad(calidad)
+		video3.permiso(soloAmigos)
+		factorDeComprension.factorDeComprension(4)
+		foto.permiso(listaBlanca)
+		texto.texto("Es muy importante")
+		texto.permiso(listaNegra)
+		faceless.agregarUsuario(carlosLombardi)
+		faceless.agregarUsuario(vadim)
+		faceless.agregarUsuario(fede)
+		faceless.agregarUsuario(fernando)
+	}
+
+	test "Permiso solo amigos" {
+		carlosLombardi.amigos(vadim)
+		faceless.usuarioPublica(carlosLombardi, video)
+		assert.that(faceless.usuarioPuedeVer(vadim, video))
+		assert.notThat(faceless.usuarioPuedeVer(fede, video))
+		assert.notThat(faceless.usuarioPuedeVer(fernando, video))
+	}
+
+	test "Permiso lista negra" {
+		vadim.amigos(fede)
+		vadim.listaNegra(fernando)
+		faceless.usuarioPublica(vadim, texto)
+		assert.that(faceless.usuarioPuedeVer(fede, texto))
+		assert.notThat(faceless.usuarioPuedeVer(fernando, texto))
+	}
+
+	test "Permiso lista blanca" {
+		fede.amigos(carlosLombardi)
+		fede.listaBlanca(vadim)
+		faceless.usuarioPublica(fede, foto)
+		assert.notThat(faceless.usuarioPuedeVer(carlosLombardi, foto))
+		assert.that(faceless.usuarioPuedeVer(vadim, foto)
+	}
+
+	test "Total de likes de una publicacion" {
+		fede.amigos(vadim)
+		fede.amigos(fernando)
+		faceless.usuarioPublica(fede, video)
+		faceless.darLike(vadim, video)
+		faceless.darLike(fernando, video)
+		assert.equals(2, faceless.totalLikes(fede))
+	}
+
+	test "Cual es el mas amistoso" {
+		vadim.amigos(fede)
+		vadim.amigos(fernando)
+		carlosLombardi.amigos(fernando)
+		assert.that(faceless.esMasAmistoso(vadim, carlosLombardi))
+	}
+
+	test "El mas popular" {
+		video.permiso(new Publico())
+		foto.permiso(new Publico())
+		texto.permiso(new Publico())
+		vadim.amigos(fede)
+		vadim.amigos(fernando)
+		vadim.amigos(carlosLombardi)
+		faceless.usuarioPublica(fede, foto)
+		faceless.usuarioPublica(carlosLombardi, texto)
+		faceless.usuarioPublica(fernando, video)
+		faceless.darLike(fernando, texto)
+		faceless.darLike(fede, texto)
+		faceless.darLike(vadim, texto)
+		faceless.darLike(fernando, foto)
+		faceless.darLike(carlosLombardi, foto)
+		faceless.darLike(vadim, video)
+		assert.equals(carlosLombardi, faceless.amigoMasPopular(vadim))
+	}
+
+	test "Quien le dio like" {
+		video.permiso(new Publico())
+		faceless.usuarioPublica(vadim, video)
+		faceless.darLike(fernando, video)
+		assert.that(faceless.dioLike(fernando, video))
+		assert.notThat(faceless.dioLike(fede, video))
+	}
+
+	test "Estalkea" {
+		video.permiso(new Publico())
+		video2.permiso(new Publico())
+		video3.permiso(new Publico())
+		foto.permiso(new Publico())
+		texto.permiso(new Publico())
+		faceless.usuarioPublica(vadim, video)
+		faceless.usuarioPublica(vadim, video2)
+		faceless.usuarioPublica(vadim, video3)
+		faceless.usuarioPublica(vadim, foto)
+		faceless.usuarioPublica(vadim, texto)
+		faceless.darLike(fede, video)
+		faceless.darLike(fede, video2)
+		faceless.darLike(fede, video3)
+		faceless.darLike(fede, foto)
+		faceless.darLike(fede, texto)
+		faceless.darLike(carlosLombardi, texto)
+		assert.that(faceless.usuarioEstalkeaAotro(fede, vadim))
+		assert.notThat(faceless.usuarioEstalkeaAotro(carlosLombardi, vadim))
+	}
+
+}
+

@@ -1,33 +1,35 @@
+import publicacion.*
 
-class Video inherits Publicacion{
-	var calidad
-	var duracion
-	
-	method calidad(cal){
-		
-		calidad=cal
+class Video inherits Publicacion {
+
+	var property calidad = null
+	var property duracion = 0
+
+	override method espacio() {
+		return duracion * calidad
 	}
-	method calidad(){
-		return calidad
-	}
-	method duracion(dur){
-		
-		duracion=dur
-		
-	}
-	method duracion(){
-		return duracion
-	}
-	override method espacio(){
-		
-		if(calidad>=720){
-			
-			return duracion*3
-		}
-		else{
-			
-			return duracion
-		}
-		
-	}
+
 }
+
+class Calidad {
+
+	method calidad()
+
+}
+
+class HD inherits Calidad {
+
+	override method calidad() {
+		return 3
+	}
+
+}
+
+class Normal inherits Calidad {
+
+	override method calidad() {
+		return 1
+	}
+
+}
+

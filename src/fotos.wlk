@@ -1,17 +1,17 @@
 import factordecomprension.*
-class Foto inherits Publicacion{
+import publicacion.*
+
+class Foto inherits Publicacion {
+
+	var property alto = 0
+	;
+	var property ancho = 0
+
+	;
 	
-	var property alto=0;
-	var property ancho=0;
-	
-  override method espacio(){
-  	
-  	
-  	return (ancho*alto)*factorDeComprension.factorDeComprension()
-  	
-  	
-  }
-	
-	
-	
+  override method espacio() {
+		return (ancho * alto) * factorDeComprension.factorDeComprension()
+	}
+
 }
+
